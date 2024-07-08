@@ -16,7 +16,7 @@ public class TutorialPlanSystem : NetworkBehaviour
     [Networked, OnChangedRender(nameof(OnCardkeyUsed))]
     public NetworkBool IsCardkeyUsed { get; set; }
 
-    private void Start()
+    private void OnEnable()
     {
         Managers.TutorialMng.TutorialPlanSystem = this;
         Managers.NetworkMng.StartSharedClient();
