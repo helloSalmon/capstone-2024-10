@@ -11,7 +11,7 @@ public class GameScene : BaseScene
         SceneType = Define.SceneType.GameScene;
 
         Managers.SoundMng.Stop(Define.SoundType.Bgm);
-        Managers.SoundMng.Play($"{Define.BGM_PATH}/Tone Hum", Define.SoundType.Environment, volume:1f);
+        Managers.SoundMng.Play($"{Define.BGM_PATH}/Space Wind 01", Define.SoundType.Environment, volume:0.15f);
 
         SettingSystem settingSystem = FindObjectOfType<SettingSystem>();
         settingSystem.Init();
@@ -33,25 +33,7 @@ public class GameScene : BaseScene
         mapSystem.Init();
         planSystem.Init();
         gameEndSystem.Init();
-        //UI_Ingame ingameUI = Managers.ObjectMng.MyCreature is Crew ? Managers.UIMng.ShowSceneUI<UI_CrewIngame>() : Managers.UIMng.ShowSceneUI<UI_AlienIngame>();
-        UI_Ingame ingameUI = null;
-        switch(Managers.ObjectMng.MyCreature)
-        {
-            case Crew:
-                if (SceneManager.GetActiveScene().name == "TutorialScene")
-                {
-                    ingameUI = Managers.UIMng.ShowSceneUI<UI_CrewTutorial>();
-                }
-                else
-                {
-                    ingameUI = Managers.UIMng.ShowSceneUI<UI_CrewIngame>();
-                }
-                break;
-
-            case Alien:
-                ingameUI = Managers.UIMng.ShowSceneUI<UI_AlienIngame>();
-                break;
-        }
+        UI_Ingame ingameUI = Managers.ObjectMng.MyCreature is Crew ? Managers.UIMng.ShowSceneUI<UI_CrewIngame>() : Managers.UIMng.ShowSceneUI<UI_AlienIngame>();
         yield return new WaitUntil(() => ingameUI.Init());
 
         ingameUI.InitAfterNetworkSpawn(Managers.ObjectMng.MyCreature);

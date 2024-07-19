@@ -15,7 +15,12 @@ public class UI_CreditController : UI_Base
     }
     enum Texts
     {
-        Credit,
+        Credit1,
+        Credit2
+    }
+    enum GameObjects
+    {
+        CREDIT,
     }
     public override bool Init()
     {
@@ -24,11 +29,12 @@ public class UI_CreditController : UI_Base
 
         Bind<Button>(typeof(Buttons));
         Bind<TMP_Text>(typeof(Texts));
+        Bind<GameObject>(typeof(GameObjects));
 
         _controller = FindObjectOfType<UI_LobbyController>();
-
         GetButton(Buttons.Btn_Return).gameObject.BindEvent((e) => { _controller.Position1(); }, Define.UIEvent.Click);
-        textscroll = GetText(Texts.Credit).GetComponent<RectTransform>();
+        textscroll = GetObject(GameObjects.CREDIT).GetComponent<RectTransform>();
+
 
         return true;
     }
@@ -38,7 +44,7 @@ public class UI_CreditController : UI_Base
         // 스크롤 시작 전 대기
         yield return new WaitForSeconds(1f);
 
-        while (textscroll.anchoredPosition.y < 4000f)
+        while (textscroll.anchoredPosition.y < 6000f)
         {
             textscroll.anchoredPosition += new Vector2(0, scrollSpeed * Time.deltaTime);
             yield return null; // 다음 프레임까지 대기

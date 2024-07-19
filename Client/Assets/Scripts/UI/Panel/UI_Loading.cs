@@ -10,6 +10,7 @@ public class UI_Loading : UI_Panel
     public enum Texts
     {
         TextPrompt,
+        Content,
     }
 
     public enum Sliders
@@ -23,7 +24,8 @@ public class UI_Loading : UI_Panel
     private TMP_Text _loadPromptText;
     private float _loadingSpeed;
     public KeyCode userPromptKey;
-    public bool LoadingMap = false;
+    public bool loadingMap = false;
+    private TMP_Text _tip;
 
     public bool IsMapLoaded { get; private set; } = false;
     public bool IsDone { get; private set; } = false;
@@ -45,9 +47,21 @@ public class UI_Loading : UI_Panel
         Bind<TMP_Text>(typeof(Texts));
         Bind<Slider>(typeof(Sliders));
 
+        string[] textForTip =
+        {
+            "Crew: Crouch to pick up an item from the floor.",
+            "Crew: When chased by an alien, shut the door to delay the alien's pursuit.",
+            "Crew: Crouch to restore stamina and sanity gauges.",
+            "Crew: Running makes your footsteps louder.",
+            "Crew: When attacked, your running speed increases momentarily.",
+            "Alien: Use the \"Roar\" skill to slow down the crew, then chase after them.",
+        };
+
         _loadingBar = Get<Slider>(Sliders.ProgressBar);
         _loadingBar.value = 0;
         _loadPromptText = GetText(Texts.TextPrompt);
+        _tip = GetText(Texts.Content);
+        _tip.text = textForTip[Random.Range(0, textForTip.Length)];
 
         waitForInput = false;
         LoadingProgress = 0.0f;
@@ -63,6 +77,7 @@ public class UI_Loading : UI_Panel
         else if (Managers.SceneMng.CurrentScene.IsSceneType((int)Define.SceneType.ReadyScene))
         {
             _loadingSpeed = 0.1f;
+            Managers.NetworkMng.IsGameLoading = true;
             StartCoroutine(TransitionCheck());
             StartCoroutine(OnAlienDropped());
         }
@@ -145,6 +160,7 @@ public class UI_Loading : UI_Panel
         yield return new WaitForSeconds(0.5f);
         Managers.UIMng.PanelUI = null;
         Destroy(transform.parent.gameObject);
+        Managers.NetworkMng.IsGameLoading = false;
     }
 
     public void OnLoadingDone()

@@ -65,7 +65,7 @@ public class SoundManager
             audioSource = _audioSources[(int)Define.SoundType.Effect];
             if (isOneShot)
             {
-                audioSource.PlayOneShot(audioClip);
+                audioSource.PlayOneShot(audioClip, volume);
                 return;
             }
             audioSource.loop = isLoop;
@@ -108,19 +108,6 @@ public class SoundManager
 
         audioSource.loop = isLoop;
         audioSource.Play();
-    }
-
-    public void PlayOneShotObjectAudio(AudioSource audioSource, string path, float volume = 1.0f)
-    {
-        if (audioSource == null)
-            return;
-
-        AudioClip clip = Managers.SoundMng.GetOrAddAudioClip(path);
-
-        if (clip == null)
-            return;
-
-        audioSource.PlayOneShot(clip, volume * CustomAudioVolume(Define.SoundType.Environment));
     }
 
     public void Stop(Define.SoundType type = Define.SoundType.Effect)

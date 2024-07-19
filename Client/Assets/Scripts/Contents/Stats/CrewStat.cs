@@ -18,7 +18,7 @@ public class CrewStat : BaseStat
     public float PassiveRecoverStamina { get; set; }
     public float DamagedRecoverStamina { get; set; }
     public float ErosionReduceSanity { get; set; }
-    public float SitRecoverStamina { get; set; }
+    public float SitRecoverSanity { get; set; }
 
     public bool IsRunnable { get; set; } = true;
     public bool Exhausted { get; set; } = false;
@@ -41,7 +41,7 @@ public class CrewStat : BaseStat
         PassiveRecoverStamina = CrewData.PassiveRecoverStamina;
         DamagedRecoverStamina = CrewData.DamagedRecoverStamina;
         ErosionReduceSanity = CrewData.ErosionReduceSanity;
-        SitRecoverStamina = CrewData.SitRecoverStamina;
+        SitRecoverSanity = CrewData.SitRecoverSanity;
     }
 
     #region Event
@@ -59,7 +59,7 @@ public class CrewStat : BaseStat
 
             ChangeStamina(DamagedRecoverStamina);
             DamagedBoost = true;
-            DOVirtual.DelayedCall(6.5f, () =>
+            DOVirtual.DelayedCall(5.5f, () =>
             {
                 DamagedBoost = false;
             });
@@ -81,7 +81,7 @@ public class CrewStat : BaseStat
         if (Stamina < 40 && !Exhausted)
         {
             Exhausted = true;
-            Managers.SoundMng.Play($"{Define.EFFECT_PATH}/Crew/Exhaust", volume: 1f, isLoop: true);
+            Managers.SoundMng.Play($"{Define.EFFECT_PATH}/Crew/Exhaust", volume: 0.5f, isLoop: true);
         }
         if (Stamina >= 40)
         {
