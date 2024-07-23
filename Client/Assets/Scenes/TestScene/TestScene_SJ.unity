@@ -5353,13 +5353,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e11b68cfa65e85444a9b9ff196f29a34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaultRoomName: Test
+  DefaultRoomName: Test2
   Creature: 1
   PrefabNum: 0
   ReadySceneSpawnPosition: {x: 1.2, y: 0, z: 0}
   ReadySceneSpawnSector: 1
   TutorialSceneSpawnPosition: {x: 0, y: 0, z: 0}
   TutorialSceneSpawnSector: 0
+  TestSceneSpawnPosition: {x: 0, y: 0, z: 0}
+  TestSceneSpawnSector: 0
 --- !u!114 &999382491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9312,14 +9314,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1544216863233061958, guid: 5231a4bab55a19a4b9326cb5ecc5b6c7, type: 3}
-      propertyPath: m_ExcludeLayers.m_Bits
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1544216863233061958, guid: 5231a4bab55a19a4b9326cb5ecc5b6c7, type: 3}
-      propertyPath: m_LayerOverridePriority
-      value: -1
-      objectReference: {fileID: 0}
     - target: {fileID: 4061364146369713168, guid: 5231a4bab55a19a4b9326cb5ecc5b6c7, type: 3}
       propertyPath: m_Name
       value: Map

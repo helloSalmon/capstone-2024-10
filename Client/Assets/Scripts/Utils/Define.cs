@@ -88,6 +88,7 @@ public static class Define
         Bgm,
         Environment,
         Effect,
+        Facility,
         MaxCount,
     }
 
@@ -188,17 +189,33 @@ public static class Define
     public const string ITEM_PATH = "Items";
     public const string BGM_PATH = "Sounds/Bgms";
     public const string EFFECT_PATH = "Sounds/Effects";
+    public const string FACILITY_PATH = "Sounds/Facilities";
 
     #endregion
 
     #region Value
 
-    public const int PLAYER_COUNT = 4;
+    public const int PLAYER_COUNT = 2;
     public const int MAX_ITEM_NUM = 4;
     public const int MAX_SKILL_NUM = 4;
 
-    public const int BATTERY_CHARGE_GOAL = 6;
+    public const float EXIT_TIME = 10.0f;
+    public static string[] TEXT_FOR_TIP =
+    {
+        "Crew: Crouch to pick up the items on the floor.",
+        "Crew: Close the doors to run away from the alien.",
+        "Crew: You can recover sanity by crouching.",
+        "Crew: Crouching makes your stamina recover faster.",
+        "Crew: While running, your footstep sound becomes much louder.",
+        "Crew: While crouching, your footstep doesn't make any sound.",
+        "Crew: After being attacked by the alien, your speed significantly increases for a short moment.",
+        "Alien: Use the \"Roar\" skill to slow down the crews.",
+        "Alien: Destroy the closed doors so that crews cannot use them again.",
+    };
+
+    public const int BATTERY_CHARGE_GOAL = 7;
     public const int USBKEY_INSERT_GOAL = 4;
+    public const int OPEN_PANIC_ROOM = 2;
     public const int TUTORIAL_BATTERY_CHARGE_GOAL = 2;
 
     #endregion
