@@ -15,9 +15,9 @@ public abstract class Creature : NetworkBehaviour
     public CreatureData CreatureData { get; protected set; }
     [Networked] public Define.CreatureType CreatureType { get; set; }
 
-    private Define.CreatureState _creatureState;
-    private Define.CreaturePose _creaturePose;
-    private Define.SectorName _currentSector;
+    protected Define.CreatureState _creatureState;
+    protected Define.CreaturePose _creaturePose;
+    protected Define.SectorName _currentSector;
 
     public Define.CreatureState CreatureState
     {
@@ -35,7 +35,7 @@ public abstract class Creature : NetworkBehaviour
                 BaseSoundController.Rpc_StopEffectSound();
         }
     }
-    public Define.CreaturePose CreaturePose
+    public virtual Define.CreaturePose CreaturePose
     {
         get => _creaturePose;
         set
@@ -66,6 +66,7 @@ public abstract class Creature : NetworkBehaviour
     public Transform Transform { get; protected set; }
     public AudioSource AudioSource { get; protected set; }
     public CapsuleCollider Collider { get; protected set; }
+    public CapsuleCollider KCCCollider { get; protected set; }
     public Rigidbody RigidBody { get; protected set; }
     public NetworkObject NetworkObject { get; protected set; }
     public SimpleKCC KCC { get; protected set; }
@@ -93,6 +94,8 @@ public abstract class Creature : NetworkBehaviour
         RigidBody = gameObject.GetComponent<Rigidbody>();
         NetworkObject = gameObject.GetComponent<NetworkObject>();
         KCC = gameObject.GetComponent<SimpleKCC>();
+
+        KCCCollider = Util.FindChild(gameObject, "KCCCollider").GetComponent<CapsuleCollider>();
 
         BaseStat = gameObject.GetComponent<BaseStat>();
         BaseAnimController = gameObject.GetComponent<BaseAnimController>();
@@ -229,7 +232,7 @@ public abstract class Creature : NetworkBehaviour
 
         //Debug.DrawRay(ray.origin, ray.direction * 1.5f, Color.red);
 
-        if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 1.5f, layerMask: LayerMask.GetMask("MapObject", "InteractableObject")))
+        if (Physics.Raycast(ray, out RaycastHit rayHit, maxDistance: 1.5f, layerMask: LayerMask.GetMask("MapObject", "InteractableObject", "PlanTargetObject")))
         {
             if (rayHit.transform.gameObject.TryGetComponent(out IInteractable interactable))
             {

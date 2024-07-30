@@ -15,6 +15,8 @@ public class Alien : Creature
     public AlienSoundController AlienSoundController => (AlienSoundController)BaseSoundController;
     public SkillController SkillController { get; protected set; }
 
+    public RoarRangeIndicator RoarRangeIndicator { get; protected set; }
+
     public UI_AlienIngame AlienIngameUI => IngameUI as UI_AlienIngame;
 
     public float CurrentSkillRange { get; set; }
@@ -45,6 +47,8 @@ public class Alien : Creature
         CreatureCamera.transform.localPosition = new Vector3(0.1f, 0.6f, 0f);
         CreatureCamera.SetInfo(this);
 
+        RoarRangeIndicator = Util.FindChild(gameObject, "RoarRangeIndicator").GetComponent<RoarRangeIndicator>();
+
         AlienStat.SetStat(AlienData);
 
         SkillController.Skills[0].SetInfo(Define.SKILL_BASIC_ATTACK_ID);
@@ -59,6 +63,7 @@ public class Alien : Creature
             StartCoroutine(Managers.SceneMng.CurrentScene.OnPlayerSpawn());
         }
 
+        Managers.GameMng.RenderingSystem.SetAlienOutlinePassVolume();
         IsSpawned = true;
     }
 
@@ -209,6 +214,11 @@ public class Alien : Creature
         if (Input.GetKeyDown(KeyCode.M))
         {
             Managers.GameMng.GameEndSystem.EndGame();
+            return true;
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            Debug.Log(BaseStat.Speed);
             return true;
         }
 
