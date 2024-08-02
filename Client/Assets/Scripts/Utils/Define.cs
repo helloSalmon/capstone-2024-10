@@ -26,7 +26,8 @@ public static class Define
         FlashBang,
         Bandage,
         Antipsychotic,
-        Morphine,
+        Adrenaline,
+        GameEnd,
     }
 
     public enum AlienActionType
@@ -43,6 +44,7 @@ public static class Define
         ReadyLeapAttack,
         LeapAttack,
         HitDelay,
+        GameEnd,
     }
 
     public enum SectorName
@@ -194,6 +196,8 @@ public static class Define
     #endregion
 
     #region Value
+
+    public const float GAME_WAIT_TIME = 10.0f;
 
     public const int PLAYER_COUNT = 4;
     public const int MAX_ITEM_NUM = 4;

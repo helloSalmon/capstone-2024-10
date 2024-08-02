@@ -4,6 +4,7 @@ using Data;
 using Fusion;
 using UnityEngine.EventSystems;
 using System.Collections;
+using System.Threading.Tasks;
 
 public class Alien : Creature
 {
@@ -15,7 +16,7 @@ public class Alien : Creature
     public AlienSoundController AlienSoundController => (AlienSoundController)BaseSoundController;
     public SkillController SkillController { get; protected set; }
 
-    public RoarRangeIndicator RoarRangeIndicator { get; protected set; }
+    public GameObject RoarRangeIndicator { get; protected set; }
 
     public UI_AlienIngame AlienIngameUI => IngameUI as UI_AlienIngame;
 
@@ -47,7 +48,8 @@ public class Alien : Creature
         CreatureCamera.transform.localPosition = new Vector3(0.1f, 0.6f, 0f);
         CreatureCamera.SetInfo(this);
 
-        RoarRangeIndicator = Util.FindChild(gameObject, "RoarRangeIndicator").GetComponent<RoarRangeIndicator>();
+        RoarRangeIndicator = Util.FindChild(gameObject, "RoarRangeIndicator");
+        RoarRangeIndicator.transform.localScale = new Vector3(0f, 0f, 0f);
 
         AlienStat.SetStat(AlienData);
 
@@ -172,17 +174,18 @@ public class Alien : Creature
         ReturnToIdle(blindTime);
     }
 
-    public IEnumerator OnGameEnd()
+    public async void OnGameEnd()
     {
         if (!HasStateAuthority || !IsSpawned)
-            yield break;
-
-        yield return new WaitUntil(() => AlienSoundController != null);
+            return;
 
         AlienSoundController.StopAllSound();
-        AlienSoundController.PlayEndGame();
+        AlienSoundController.PlaySound(Define.AlienActionType.GameEnd);
 
-        yield return new WaitUntil(() => AlienIngameUI != null);
+        while (AlienIngameUI == null)
+        {
+            await Task.Delay(500);
+        }
 
         AlienIngameUI.HideUI();
         AlienIngameUI.EndGame();

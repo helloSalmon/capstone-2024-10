@@ -9529,7 +9529,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1343902041442310, guid: 8d7e82dc86fe3b54999297cdfc904ecb, type: 3}
       propertyPath: m_Name
-      value: MedKit_Morphine
+      value: MedKit_Adrenaline
       objectReference: {fileID: 0}
     - target: {fileID: 4837046210294490, guid: 8d7e82dc86fe3b54999297cdfc904ecb, type: 3}
       propertyPath: m_LocalPosition.x
