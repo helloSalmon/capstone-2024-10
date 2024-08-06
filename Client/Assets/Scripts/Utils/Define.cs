@@ -173,7 +173,7 @@ public static class Define
     public const int ITEM_USBKEY_ID = 201001;
     public const int ITEM_CARDKEY_ID = 201002;
     public const int ITEM_BANDAGE_ID = 202000;
-    public const int ITEM_MORPHINE_ID = 202001;
+    public const int ITEM_ADRENALINE_ID = 202001;
     public const int ITEM_ANTIPSYCHOTIC_ID = 202002;
     public const int ITEM_FLASHBANG_ID = 203000;
 
@@ -197,30 +197,34 @@ public static class Define
 
     #region Value
 
-    public const float GAME_WAIT_TIME = 10.0f;
+    public const float GAME_WAIT_TIME = 20.0f;
+    public const float EXIT_TIME = 10.0f;
 
     public const int PLAYER_COUNT = 4;
     public const int MAX_ITEM_NUM = 4;
     public const int MAX_SKILL_NUM = 4;
 
-    public const float EXIT_TIME = 10.0f;
+    public const int BATTERY_CHARGE_GOAL = 6;
+    public const int USBKEY_INSERT_GOAL = 5;
+    public const int OPEN_PANIC_ROOM = 2;
+    public const int TUTORIAL_BATTERY_CHARGE_GOAL = 2;
+
+    #endregion
+
+    #region Text
+
     public static string[] TEXT_FOR_TIP =
     {
         "Crew: Crouch to pick up the items on the floor.",
-        "Crew: Close the doors to run away from the alien.",
+        "Crew: Close the door to run away from the alien.",
         "Crew: You can recover sanity by crouching.",
         "Crew: Crouching makes your stamina recover faster.",
-        "Crew: While running, your footstep sound becomes much louder.",
-        "Crew: While crouching, your footstep doesn't make any sound.",
-        "Crew: After being attacked by the alien, your speed significantly increases for a short moment.",
-        "Alien: Use the \"Roar\" skill to slow down the crews.",
-        "Alien: Destroy the closed doors so that crews cannot use them again.",
+        "Crew: While running, your footsteps becomes much louder.",
+        "Crew: While crouching, your footsteps don't make any sound.",
+        "Crew: After being attacked by the alien, your speed briefly increases significantly.",
+        "Alien: Use the \"Roar\" skill to slow down the crew.",
+        "Alien: Destroy the closed doors so the crew can't use them again.",
     };
-
-    public const int BATTERY_CHARGE_GOAL = 7;
-    public const int USBKEY_INSERT_GOAL = 4;
-    public const int OPEN_PANIC_ROOM = 2;
-    public const int TUTORIAL_BATTERY_CHARGE_GOAL = 2;
 
     #endregion
 }

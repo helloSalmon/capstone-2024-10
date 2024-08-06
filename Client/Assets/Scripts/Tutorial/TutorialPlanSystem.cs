@@ -67,14 +67,14 @@ public class TutorialPlanSystem : NetworkBehaviour
 
         if (Managers.ObjectMng.MyCreature is Alien) return;
 
-        BatteryCharger.SetLayerRecursive(LayerMask.NameToLayer("PlanTarget      "));
+        BatteryCharger.SetLayerRecursive(LayerMask.NameToLayer("PlanTargetObject"));
     }
 
     private void OnBatteryCharge()
     {
         if (BatteryChargeCount == Define.TUTORIAL_BATTERY_CHARGE_GOAL)
         {
-            Managers.SoundMng.Play($"{Define.FACILITY_PATH}/Plan_BatteryCharge", type: Define.SoundType.Facility, volume:0.4f, isLoop: false);
+            Managers.SoundMng.Play($"{Define.FACILITY_PATH}/Plan_BatteryCharge", type: Define.SoundType.Facility, volume:0.4f, isOneShot:true);
         }
 
         if (Managers.ObjectMng.MyCreature is Alien) return;
