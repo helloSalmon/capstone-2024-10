@@ -1032,7 +1032,6 @@ GameObject:
   - component: {fileID: -13453720483681787}
   - component: {fileID: 268809720184150372}
   - component: {fileID: 2656646541101528400}
-  - component: {fileID: 8848567419615919483}
   - component: {fileID: 6976675480461094696}
   - component: {fileID: -3236823099726202573}
   - component: {fileID: 5621330392291139302}
@@ -1080,7 +1079,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 07f33cee22a1b194e9acf9165c916191, type: 3}
   m_Controller: {fileID: 9100000, guid: 72accfa72a7464e4aa5ee9f3b7b1b3c5, type: 2}
-  m_CullingMode: 2
+  m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
@@ -1136,8 +1135,8 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 1.1
-  m_Height: 2.85
+  m_Radius: 1.15
+  m_Height: 3.3
   m_Direction: 1
   m_Center: {x: 0, y: 1.425, z: 0}
 --- !u!82 &268809720184150372
@@ -1289,7 +1288,6 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 8848567419615919483}
   - {fileID: 6976675480461094696}
   - {fileID: -3236823099726202573}
   - {fileID: 5621330392291139302}
@@ -1301,24 +1299,6 @@ MonoBehaviour:
   - {fileID: -4598067215046518199}
   - {fileID: 1910566033739555847}
   - {fileID: 8114384917890620963}
---- !u!114 &8848567419615919483
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8694943018831287373}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Animator: {fileID: 8694943018821805677}
-  TotalWords: 4
-  ApplyTiming: 2
-  SyncSettings: 79
-  StateHashes: 000000005775fad1d53ab654dae5fc967fa11b293c9dc5edd75e4d10dede26c18c8459e8fd7f1c12cecc392513b27f7020015a47e05aa2880b992a75bf551917a252de505d6823aa47f919405218bea44889844e
-  TriggerHashes: 00000000
 --- !u!114 &6976675480461094696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1344,9 +1324,9 @@ MonoBehaviour:
     ProxyInterpolationMode: 0
     TeleportThreshold: 1
     AntiJitterDistance: {x: 0.025, y: 0.01}
-    CompressNetworkPosition: 0
-    ForcePredictedLookRotation: 0
-    StepHeight: 0.5
+    CompressNetworkPosition: 1
+    ForcePredictedLookRotation: 1
+    StepHeight: 0.4
     StepDepth: 0.2
     StepSpeed: 1
     StepMinPushBack: 0.5
@@ -1414,6 +1394,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94ff61e00a954d2ca211bbcd85136341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _CreaturePose: 0
   _XParameter: 0
   _ZParameter: 0
   _SpeedParameter: 0
