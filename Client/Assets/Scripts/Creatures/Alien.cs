@@ -59,12 +59,13 @@ public class Alien : Creature
 
         CurrentSkillRange = SkillController.Skills[0].SkillData.Range;
 
-        if (Managers.SceneMng.CurrentScene.IsSceneType((int)Define.SceneType.GameScene))
+        Managers.GameMng.RenderingSystem.SetAlienOutlinePassVolume();
+
+        if (HasStateAuthority && Managers.NetworkMng.IsTestScene)
         {
             StartCoroutine(Managers.SceneMng.CurrentScene.OnPlayerSpawn());
         }
 
-        Managers.GameMng.RenderingSystem.SetAlienOutlinePassVolume();
         IsSpawned = true;
     }
 
@@ -94,7 +95,7 @@ public class Alien : Creature
         if (CreatureState == Define.CreatureState.Damaged || CreatureState == Define.CreatureState.Interact || CreatureState == Define.CreatureState.Use)
             return;
 
-        if (TestInputs())
+        if (Managers.SceneMng.IsTestScene && TestInputs())
             return;
 
         if (Input.GetKeyDown(KeyCode.F))
@@ -133,7 +134,7 @@ public class Alien : Creature
 
     protected override void UpdateIdle()
     {
-        KCC.SetLookRotation(0, CreatureCamera.transform.rotation.eulerAngles.y);
+        KCC.SetLookRotation(0, CurrentAngle);
     }
 
     protected override void UpdateMove()
@@ -145,7 +146,7 @@ public class Alien : Creature
                 break;
         }
 
-        KCC.SetLookRotation(0, CreatureCamera.transform.rotation.eulerAngles.y);
+        KCC.SetLookRotation(0, CurrentAngle);
 
         KCC.Move(Velocity * (AlienStat.Speed * Runner.DeltaTime));
     }
@@ -187,14 +188,15 @@ public class Alien : Creature
         }
 
         Managers.UIMng.ClosePanelUI<UI_CameraPanel>();
-        AlienIngameUI.HideUI();
-        AlienIngameUI.EndGame();
+        AlienIngameUI.HideUi();
+        //AlienIngameUI.EndGame();
 
-        Rpc_OnGameEnd();
+        Rpc_DisableSelf();
+        Managers.SceneMng.LoadScene(Define.SceneType.EndingScene);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void Rpc_OnGameEnd()
+    public void Rpc_DisableSelf()
     {
         gameObject.SetActive(false);
     }

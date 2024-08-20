@@ -72,14 +72,12 @@ public class Crew : Creature
         CrewStat.SetStat(CrewData);
         Inventory.SetInfo();
 
-        IsSpawned = true;
-
-        if (HasStateAuthority &&
-            Managers.SceneMng.CurrentScene.IsSceneType((int)Define.SceneType.GameScene |
-            (int)Define.SceneType.ReadyScene | (int)Define.SceneType.TutorialScene))
+        if (HasStateAuthority && Managers.NetworkMng.IsTestScene)
         {
             StartCoroutine(Managers.SceneMng.CurrentScene.OnPlayerSpawn());
         }
+
+        IsSpawned = true;
     }
 
     #region Update
@@ -108,7 +106,7 @@ public class Crew : Creature
         if (CreatureState == Define.CreatureState.Damaged || CreatureState == Define.CreatureState.Dead)
             return;
 
-        if (TestInputs())
+        if (Managers.SceneMng.IsTestScene && TestInputs())
             return;
 
         if (CreatureState == Define.CreatureState.Interact || CreatureState == Define.CreatureState.Use)
@@ -217,7 +215,7 @@ public class Crew : Creature
                 break;
         }
 
-        KCC.SetLookRotation(0, CreatureCamera.transform.rotation.eulerAngles.y);
+        KCC.SetLookRotation(0, CurrentAngle);
     }
 
     protected override void UpdateMove()
@@ -238,7 +236,7 @@ public class Crew : Creature
         if (CrewStat.DamagedBoost)
             CrewStat.Speed *= 1.5f;
 
-        KCC.SetLookRotation(0, CreatureCamera.transform.rotation.eulerAngles.y);
+        KCC.SetLookRotation(0, CurrentAngle);
 
         KCC.Move(Velocity * (CrewStat.Speed * Runner.DeltaTime));
     }
@@ -296,23 +294,28 @@ public class Crew : Creature
         CrewStat.ChangeSanity(-value);
     }
 
-    public void OnDefeat()
+    public async void OnDefeat()
     {
         if (!HasStateAuthority || CreatureState == Define.CreatureState.Dead || !IsSpawned)
             return;
 
         CreatureState = Define.CreatureState.Dead;
+        Managers.GameMng.GameResult = Define.GameResultType.CrewDefeat;
 
         CrewAnimController.PlayAnim(Define.CrewActionType.Dead);
         CrewSoundController.StopAllSound();
         CrewSoundController.PlaySound(Define.CrewActionType.Dead);
 
-        CrewIngameUI.HideUI();
+        CrewIngameUI.HideUi();
         Managers.UIMng.ClosePanelUI<UI_CameraPanel>();
         Managers.GameMng.GameEndSystem.EndCrewGame(false);
 
-        Rpc_OnDisable(12f);
-        StartCoroutine(Inventory.OnDefeat());
+        Rpc_DisableSelf(12f);
+        StartCoroutine(Inventory.DropAllItems());
+
+        await Task.Delay(8000);
+
+        Managers.SceneMng.LoadScene(Define.SceneType.EndingScene);
     }
 
     public virtual async void OnWin()
@@ -321,6 +324,7 @@ public class Crew : Creature
             return;
 
         CreatureState = Define.CreatureState.Idle;
+        Managers.GameMng.GameResult = Define.GameResultType.CrewWin;
 
         CrewSoundController.StopAllSound();
         CrewSoundController.PlaySound(Define.CrewActionType.GameEnd);
@@ -333,14 +337,15 @@ public class Crew : Creature
             await Task.Delay(500);
         }
 
-        CrewIngameUI.HideUI();
-        CrewIngameUI.EndGame();
+        CrewIngameUI.HideUi();
+        //CrewIngameUI.EndGame();
 
-        Rpc_OnDisable();
+        Rpc_DisableSelf();
+        Managers.SceneMng.LoadScene(Define.SceneType.EndingScene);
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void Rpc_OnDisable(float time = 0f)
+    public void Rpc_DisableSelf(float time = 0f)
     {
         Collider.enabled = false;
         KCCCollider.enabled = false;

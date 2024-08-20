@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameScene : BaseScene
 {
@@ -14,10 +16,19 @@ public class GameScene : BaseScene
 
         SettingSystem settingSystem = FindObjectOfType<SettingSystem>();
         settingSystem.Init();
+
+        string currentSceneName = Managers.SceneMng.GetCurrentSceneName();
+
+        if (currentSceneName.ToLower().Contains("test"))
+        {
+            Managers.SceneMng.IsTestScene = true;
+        }
     }
 
     public override IEnumerator OnPlayerSpawn()
     {
+        Managers.GameMng.GameResult = Define.GameResultType.NotDecided;
+
         MapSystem mapSystem = null;
         PlanSystem planSystem = null;
         GameEndSystem gameEndSystem = null;
@@ -39,10 +50,6 @@ public class GameScene : BaseScene
         ingameUI.InitAfterNetworkSpawn(Managers.ObjectMng.MyCreature);
         Managers.ObjectMng.MyCreature.IngameUI = ingameUI;
         Managers.UIMng.OnMapLoadComplete();
-
-        yield return new WaitUntil(() => Managers.NetworkMng.Runner.IsRunning && Managers.GameMng.GameEndSystem.AreAllPlayersLoaded);
-
-        Managers.UIMng.BlockLoadingUI(false);
     }
 
     private void Update()
