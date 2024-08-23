@@ -106,7 +106,7 @@ public class Crew : Creature
         if (CreatureState == Define.CreatureState.Damaged || CreatureState == Define.CreatureState.Dead)
             return;
 
-        if (Managers.SceneMng.IsTestScene && TestInputs())
+        if (TestInputs())
             return;
 
         if (CreatureState == Define.CreatureState.Interact || CreatureState == Define.CreatureState.Use)
@@ -296,7 +296,7 @@ public class Crew : Creature
 
     public async void OnDefeat()
     {
-        if (!HasStateAuthority || CreatureState == Define.CreatureState.Dead || !IsSpawned)
+        if (!HasStateAuthority || CreatureState == Define.CreatureState.Dead || !IsSpawned || Managers.NetworkMng.IsEndGameTriggered)
             return;
 
         CreatureState = Define.CreatureState.Dead;
@@ -320,7 +320,7 @@ public class Crew : Creature
 
     public virtual async void OnWin()
     {
-        if (!HasStateAuthority || CreatureType != Define.CreatureType.Crew)
+        if (!HasStateAuthority || CreatureType != Define.CreatureType.Crew || Managers.NetworkMng.IsEndGameTriggered)
             return;
 
         CreatureState = Define.CreatureState.Idle;
@@ -341,6 +341,8 @@ public class Crew : Creature
         //CrewIngameUI.EndGame();
 
         Rpc_DisableSelf();
+
+        await Task.Delay(3000);
         Managers.SceneMng.LoadScene(Define.SceneType.EndingScene);
     }
 
@@ -376,6 +378,7 @@ public class Crew : Creature
 
     protected override bool TestInputs()
     {
+        if (!Managers.NetworkMng.IsTestScene) return false;
         if (Input.GetKeyDown(KeyCode.U))
         {
             Rpc_OnDamaged(1);

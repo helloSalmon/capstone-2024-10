@@ -16,18 +16,11 @@ public class GameScene : BaseScene
 
         SettingSystem settingSystem = FindObjectOfType<SettingSystem>();
         settingSystem.Init();
-
-        string currentSceneName = Managers.SceneMng.GetCurrentSceneName();
-
-        if (currentSceneName.ToLower().Contains("test"))
-        {
-            Managers.SceneMng.IsTestScene = true;
-        }
     }
 
     public override IEnumerator OnPlayerSpawn()
     {
-        Managers.GameMng.GameResult = Define.GameResultType.NotDecided;
+        Managers.GameMng.GameResult = Define.GameResultType.Disconnected;
 
         MapSystem mapSystem = null;
         PlanSystem planSystem = null;
@@ -58,7 +51,7 @@ public class GameScene : BaseScene
         {
             if (FindAnyObjectByType<UI_ExitGame>() == null &&
                 FindAnyObjectByType<UI_SettingPanel>() == null &&
-                FindAnyObjectByType<UI_ManualPanel>() == null)
+                FindAnyObjectByType<UI_GuidePanel>() == null)
                 Managers.UIMng.ShowPanelUI<UI_ExitGame>();
         }
     }

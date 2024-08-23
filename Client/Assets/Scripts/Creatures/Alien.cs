@@ -95,7 +95,7 @@ public class Alien : Creature
         if (CreatureState == Define.CreatureState.Damaged || CreatureState == Define.CreatureState.Interact || CreatureState == Define.CreatureState.Use)
             return;
 
-        if (Managers.SceneMng.IsTestScene && TestInputs())
+        if (TestInputs())
             return;
 
         if (Input.GetKeyDown(KeyCode.F))
@@ -205,6 +205,8 @@ public class Alien : Creature
 
     protected override bool TestInputs()
     {
+        if (!Managers.NetworkMng.IsTestScene) return false;
+
         if (Input.GetKeyDown(KeyCode.K))
         {
             Rpc_ApplyBlind(3.5f, 1f);
@@ -213,12 +215,12 @@ public class Alien : Creature
         if (Input.GetKeyDown(KeyCode.N))
         {
             Managers.GameMng.GameEndSystem.KilledCrewNum = Define.PLAYER_COUNT - 1;
-            Managers.GameMng.GameEndSystem.EndGame();
+            Managers.GameMng.GameEndSystem.EndAlienGame();
             return true;
         }
         if (Input.GetKeyDown(KeyCode.M))
         {
-            Managers.GameMng.GameEndSystem.EndGame();
+            Managers.GameMng.GameEndSystem.EndAlienGame();
             return true;
         }
         if (Input.GetKeyDown(KeyCode.L))

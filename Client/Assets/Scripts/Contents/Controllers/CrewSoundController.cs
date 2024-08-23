@@ -5,6 +5,9 @@ using UnityEngine.ProBuilder;
 public class CrewSoundController : BaseSoundController
 {
     public float ChasingBgmVolume { get; protected set; }
+
+    public Crew Crew => Creature as Crew;
+
     protected override void Init()
     {
         base.Init();
@@ -17,13 +20,13 @@ public class CrewSoundController : BaseSoundController
         switch (CreaturePose)
         {
             case Define.CreaturePose.Stand:
-                Rpc_PlayFootStepSound(1.205f, 0.045f, 10f);
+                Rpc_PlayFootStepSound(1.205f, 0.045f, 12f);
                 break;
             case Define.CreaturePose.Sit:
                 Rpc_StopEffectSound();
                 break;
             case Define.CreaturePose.Run:
-                Rpc_PlayFootStepSound(2f, 0.7f);
+                Rpc_PlayFootStepSound(2f, 0.7f, Crew.CrewStat.DamagedBoost ? 12f : 20f);
                 break;
         }
     }
@@ -139,5 +142,11 @@ public class CrewSoundController : BaseSoundController
             if (BgmAudioSource.volume <= 0f)
                 Managers.SoundMng.Stop(Define.SoundType.Bgm);
         }
+    }
+
+    public void DamagedBoostEnd()
+    {
+        if (Crew.CreaturePose == Define.CreaturePose.Run)
+            CreatureAudioSource.maxDistance = 20f;
     }
 }
