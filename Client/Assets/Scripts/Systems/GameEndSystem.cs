@@ -14,12 +14,6 @@ public class GameEndSystem : NetworkBehaviour
     [Networked]
     public bool IsGameStarted { get; set; } = false;
     [Networked]
-    public bool IsCrewKilled { get; set; } = false;
-    [Networked]
-    public bool IsCrewDropped { get; set; } = false;
-    [Networked]
-    public bool IsCrewWinning { get; set; } = false;
-    [Networked]
     public int LoadedPlayerNum { get; set; } = 0;
     public float ElapsedTime { get; set; } = 0f;
     [Networked]
@@ -133,7 +127,7 @@ public class GameEndSystem : NetworkBehaviour
     {
         Managers.UIMng.CheckDroppedPlayer();
 
-        if (CrewNum <= 0)
+        if (CrewNum == 0)
         {
             EndAlienGame();
         }
@@ -146,63 +140,41 @@ public class GameEndSystem : NetworkBehaviour
 
     public void OnCrewDropped(PlayerRef playerRef)
     {
-        if (Managers.NetworkMng.IsTutorialScene || Managers.NetworkMng.IsTestScene)
+        if (Managers.NetworkMng.IsTutorialScene)
             return;
 
-        IsCrewDropped = true;
         var pd = Managers.NetworkMng.GetPlayerData(playerRef);
         if (pd.State == Define.CrewState.Alive)
         {
             CrewNum--;
             DroppedCrewNum++;
             pd.State = Define.CrewState.Disconnected;
+            Rpc_DropMessage();
         }
     }
 
     [Rpc(RpcSources.All, RpcTargets.All)]
-    public void Rpc_EndCrewGame(NetworkBool isWin, PlayerRef playerRef = default)
+    private void Rpc_EndCrewGame(NetworkBool isWin, PlayerRef playerRef = default)
     {
         var pd = Managers.NetworkMng.GetPlayerData(playerRef);
 
         if (isWin)
         {
-            IsCrewWinning = true;
             pd.State = Define.CrewState.GameWin;
+            if (Runner.LocalPlayer != playerRef) Managers.ObjectMng.MyCreature.IngameUI.NotificationUI.EscapeMessage();
         }
         else
         {
             KilledCrewNum++;
-            IsCrewKilled = true;
             pd.State = Define.CrewState.GameDefeat;
+            if (Runner.LocalPlayer != playerRef) Managers.ObjectMng.MyCreature.IngameUI.NotificationUI.DeadMessage();
         }
 
         CrewNum--;
     }
-
     [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_ResetDropCrew()
+    private void Rpc_DropMessage()
     {
-        if (Managers.NetworkMng.IsTutorialScene || Managers.NetworkMng.IsTestScene)
-            return;
-
-        IsCrewDropped = false;
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_ResetKilledCrew()
-    {
-        if (Managers.NetworkMng.IsTutorialScene || Managers.NetworkMng.IsTestScene)
-            return;
-
-        IsCrewKilled = false;
-    }
-
-    [Rpc(RpcSources.All, RpcTargets.All)]
-    public void RPC_ResetWinedCrew()
-    {
-        if (Managers.NetworkMng.IsTutorialScene || Managers.NetworkMng.IsTestScene)
-            return;
-
-        IsCrewWinning = false;
+        Managers.ObjectMng.MyCreature.IngameUI.NotificationUI.DropMessage();
     }
 }
