@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+// Application 빌드할 때 필요
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UI_MainScene : UI_Scene
 {
